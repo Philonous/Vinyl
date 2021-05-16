@@ -28,7 +28,7 @@ module Data.Vinyl.Class.Method
   ( -- * Mapping methods over records
     RecMapMethod(..)
   , rmapMethodF
-  , mapFields
+  -- , mapFields
   , RecMapMethod1(..)
   , RecPointed(..)
   , rtraverseInMethod
@@ -212,14 +212,14 @@ rmapMethodF :: forall c f ts. (Functor f, FieldPayload f ~ 'FieldId, RecMapMetho
 rmapMethodF f = rmapMethod @c (fmap f)
 {-# INLINE rmapMethodF #-}
 
--- | Apply a typeclass method to each field of a 'FieldRec'. This is a
--- specialization of 'rmapMethod'.
-mapFields :: forall c ts. RecMapMethod c ElField ts
-           => (forall a. c a => a -> a) -> FieldRec ts -> FieldRec ts
-mapFields f = rmapMethod @c g
-  where g :: c (PayloadType ElField t) => ElField t -> ElField t
-        g (Field x) = Field (f x)
-{-# INLINE mapFields #-}
+-- -- | Apply a typeclass method to each field of a 'FieldRec'. This is a
+-- -- specialization of 'rmapMethod'.
+-- mapFields :: forall c ts. RecMapMethod c ElField ts
+--            => (forall a. c a => a -> a) -> FieldRec ts -> FieldRec ts
+-- mapFields f = rmapMethod @c g
+--   where g :: c (PayloadType ElField t) => ElField t -> ElField t
+--         g (Field x) = Field (f x)
+-- {-# INLINE mapFields #-}
 
 -- | Like 'rtraverseIn', but the function between functors may be
 -- constrained.

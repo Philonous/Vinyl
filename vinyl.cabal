@@ -80,6 +80,7 @@ benchmark accessors
   main-is:          AccessorsBench.hs
   build-depends:    base, criterion, tagged, vinyl, microlens
   other-modules:    Bench.ARec
+  other-modules:    Bench.SRec
                     Bench.Rec
                     Bench.ARecOld
   ghc-options:      -O2

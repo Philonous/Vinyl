@@ -7,6 +7,7 @@
 
 import           Control.Monad     (unless)
 import           Criterion.Main
+import           GHC.Arr
 import           Data.Monoid       (Endo(..))
 import           Data.Vinyl
 import           Data.Vinyl.Syntax ()
@@ -15,7 +16,8 @@ import           System.Exit       (exitFailure)
 
 import qualified Bench.ARecOld     as ARecOld
 import           Bench.ARec
-import Bench.Rec
+import           Bench.SRec
+import           Bench.Rec
 
 data HaskRec = HaskRec {
   a0 :: Int,
@@ -154,6 +156,7 @@ main =
          , -}
          bgroup "creating"
          [ bench "vinyl record" $ whnf mkRec 0
+         , bench "toSRec" $ whnf mkToSRec 0
          , bench "Old style ARec with toARec " $ whnf ARecOld.mkToARec 0
          , bench "Old style ARec with toARecFast " $ whnf ARecOld.mkToARecFast 0
          , bench "Old style ARec with arec " $ whnf ARecOld.mkARec 0
@@ -166,24 +169,25 @@ main =
 {-         , bench "strict haskell record" $ whnf sumSHaskRec shaskRec
          , bench "unboxed strict haskell record" $ whnf sumUSHaskRec ushaskRec
 -}
+         , bench "vinyl SRec" $ nf sumSRec srec
          , bench "vinyl Rec" $ nf sumRec newF
          , bench "vinyl ARec" $ nf sumARec arec
          , bench "vinyl ARec Old" $ nf ARecOld.sumARec arecOld
          ]
-       , bgroup "FieldRec"
-         [ bench "a0" $ nf (rvalf #a0) newF
-         , bench "a4" $ nf (rvalf #a4) newF
-         , bench "a8" $ nf (rvalf #a8) newF
-         , bench "a12" $ nf (rvalf #a12) newF
-         , bench "a15"  $ nf (rvalf #a15) newF
-         ]
-         , bgroup "AFieldRec"
-         [ bench "a0" $ nf (rvalf #a0) arec
-         -- , bench "a4" $ nf (rvalf #a4) arec
-         -- , bench "a8" $ nf (rvalf #a8) arec
-         -- , bench "a12" $ nf (rvalf #a12) arec
-         , bench "a15"  $ nf (rvalf #a15) arec
-         ]
+       -- , bgroup "FieldRec"
+       --   [ bench "a0" $ nf (rvalf #a0) newF
+       --   , bench "a4" $ nf (rvalf #a4) newF
+       --   , bench "a8" $ nf (rvalf #a8) newF
+       --   , bench "a12" $ nf (rvalf #a12) newF
+       --   , bench "a15"  $ nf (rvalf #a15) newF
+       --   ]
+       --   , bgroup "AFieldRec"
+       --   [ bench "a0" $ nf (rvalf #a0) arec
+       --   -- , bench "a4" $ nf (rvalf #a4) arec
+       --   -- , bench "a8" $ nf (rvalf #a8) arec
+       --   -- , bench "a12" $ nf (rvalf #a12) arec
+       --   , bench "a15"  $ nf (rvalf #a15) arec
+       --   ]
 {-         , bgroup "SFieldRec"
          [ bench "a0" $ nf (rvalf #a0) srec
          -- , bench "a4" $ nf (rvalf #a4) srec
